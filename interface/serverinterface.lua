@@ -7,9 +7,21 @@ local function stopGenericServer(server)
     os.execute("screen -XS %" .. server.name .. " quit")
 end
 
+local function startGenericServer(server)
+    os.execute("screen -Sdm \"%" .. server.name .. "\" bash -c \"cd '" .. server.directory .. "'; bash run.sh\"")
+end
+
+function serverinterface.startServer(server)
+    if server.type == "minecraft" then
+
+    else
+        startGenericServer(server)
+    end
+end
+
 function serverinterface.stopServer(server)
     if server.type == "minecraft" then
-        os.execute("bash \"" .. MY_PATH .. "interface/minecraft.sh\" \"%" .. server.name .. "\" &")
+        os.execute("bash \"" .. MY_PATH .. "interface/stop-minecraft.sh\" \"%" .. server.name .. "\" &")
     else
         stopGenericServer(server)
     end
@@ -29,7 +41,7 @@ function serverinterface.stopServers(servers)
         end
     end
 
-    io.stderr:write("STATUS: Waiting for closing servers to stop...")
+    io.stderr:write("STATUS: Waiting for closing servers to stop...\n")
     local allStopped = false
     local counter = 0
     while not allStopped do
@@ -60,6 +72,7 @@ function serverinterface.stopServers(servers)
         end
         if not allStopped then os.execute("sleep 1") end
     end
+    if allStopped then io.stderr:write("STATUS: Closed servers successfully\n") end
 end
 
 return serverinterface
