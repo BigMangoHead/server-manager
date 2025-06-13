@@ -42,3 +42,5 @@ function jsonhandler.updateOnlineServers(data)
     onlineServerDataFile:write(jsondata)
     onlineServerDataFile:close()
 end
+
+return jsonhandler

@@ -72,7 +72,7 @@ function update.run()
         end
     end
 
-    if table.getn(serversToKill) > 0 then serverinterface.stopServers(serversToKill) end
+    if #serversToKill > 0 then serverinterface.stopServers(serversToKill) end
 
     serverinterface.startServers(serversToRun)
 
