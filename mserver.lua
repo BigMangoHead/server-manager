@@ -17,7 +17,7 @@ elseif arg[1] == "status" then
     require("status").run(arg)
 
 elseif arg[1] == "run" then
-    require("run").run(arg)
+    require("run").run(arg[2])
 
 elseif arg[1] == "stop" then
     require("stop").run(arg)
