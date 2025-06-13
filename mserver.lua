@@ -21,13 +21,13 @@ elseif arg[1] == "run" then
     require("runner").run(arg[2])
 
 elseif arg[1] == "stop" then
-    require("runner").stop(arg)
+    require("runner").stop(arg[2])
 
 elseif arg[1] == "edit" then
-    require("edit").run(arg)
+    --require("edit").run(arg)
 
 elseif arg[1] == "add" then
-    require("add").run(arg)
+    --require("add").run(arg)
 
 elseif arg[1] == "freeze" then
     require("freezer").freeze()
