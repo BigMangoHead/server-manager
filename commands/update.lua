@@ -1,25 +1,12 @@
-local json = require("lunajson")
 local screenhelper = require("screen")
 local serverinterface = require("serverinterface")
+local jsonhandler = require("jsonhandler")
 
 local update = {}
 
 function update.run()
-    serverDataFile, error = io.open(SERVER_DATA_PATH)
-    if not serverDataFile then
-        error("Error opening server data file: " .. error)
-    end
-    serverData = json.decode(serverDataFile:read("*all"))
-    serverDataFile:close()
 
-    onlineServerDataFile, error = io.open(ONLINE_SERVER_DATA_PATH)
-    if not onlineServerDataFile then
-        error("Error opening online server data file: " .. error)
-    end
-    onlineServerData = json.decode(onlineServerDataFile:read("*all"))
-    onlineServerDataFile:close()
-
-    io.stderr:write("STATUS: Successfully decoded server data and online server data.\n")
+    local serverData, onlineServerData = jsonhandler.getServers()
 
     for name, server in pairs(onlineServerData) do
         if not server.priority then
