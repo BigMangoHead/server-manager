@@ -15,3 +15,5 @@ function runcmd.run(name)
 
     require("update").run()
 end
+
+return runcmd
