@@ -80,7 +80,6 @@ function update.run()
             server = serverData[screen]
             server.name = screen
             table.insert(serversToKill, server)
-            io.stderr:write("STATUS: Scheduling " .. screen .. " to be killed.\n")
         else 
             serversToRun[screen] = nil
         end
@@ -88,9 +87,6 @@ function update.run()
 
     serverinterface.stopServers(serversToKill)
 
-    for name in pairs(serversToRun) do
-        io.stderr:write("STATUS: Scheduling " .. name .. " to be started.\n")
-    end
     serverinterface.startServers(serversToRun)
 
 end
