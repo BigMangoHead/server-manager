@@ -1,6 +1,7 @@
 
 SERVER_DATA_PATH = "/home/bigma/scripts/data/mserver-data.json"
 ONLINE_SERVER_DATA_PATH = "/home/bigma/scripts/data/mserver-online.json"
+FREEZE_FILE_PATH = "/home/bigma/scripts/data/mserver-freeze"
 
 -- In megabytes
 MAX_RAM = 32768
@@ -14,18 +15,24 @@ if arg[1] == "update" then
     require("update").run()
 
 elseif arg[1] == "status" then
-    require("status").run(arg)
+    require("info").status()
 
 elseif arg[1] == "run" then
-    require("run").run(arg[2])
+    require("runner").run(arg[2])
 
 elseif arg[1] == "stop" then
-    require("stop").run(arg)
+    require("runner").stop(arg)
 
 elseif arg[1] == "edit" then
     require("edit").run(arg)
 
 elseif arg[1] == "add" then
     require("add").run(arg)
+
+elseif arg[1] == "freeze" then
+    require("freezer").freeze()
+
+elseif arg[1] == "unfreeze" then
+    require("freezer").unfreeze()
 
 end

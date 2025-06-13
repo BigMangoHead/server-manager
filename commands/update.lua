@@ -6,6 +6,13 @@ local update = {}
 
 function update.run()
 
+    local freezeFile = io.open(FREEZE_FILE_PATH)
+    if (freezeFile:read("*all") == "1") then 
+        io.stderr:write("STATUS: Server is frozen, update not processed.\n")
+        return
+    end
+    freezeFile:close()
+
     local serverData, onlineServerData = jsonhandler.getServers()
 
     for name, server in pairs(onlineServerData) do
