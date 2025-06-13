@@ -21,7 +21,7 @@ function runner.stop(name)
     serverData, onlineServerData = jsonhandler.getServers()
 
     onlineServerData[name] = nil
-    jsonhandler.udpateOnlineServers(onlineServerData)
+    jsonhandler.updateOnlineServers(onlineServerData)
 
     update.run()
 end
