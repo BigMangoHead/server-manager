@@ -1,7 +1,9 @@
 
+local moreos = {}
+
 -- From Norman Ramsey on StackOverflow
 -- raw=false removes ALL newlines, alongside whitespace from start and end
-function os.capture(cmd, raw)
+function moreos.capture(cmd, raw)
     local f = assert(io.popen(cmd, 'r'))
     local s = assert(f:read('*a'))
     f:close()
@@ -12,4 +14,11 @@ function os.capture(cmd, raw)
     return s
 end
 
-return os
+-- Adds a system user if one does not exist and does nothing otherwise
+function moreos.makeUser(username)
+    if not os.execute("id " .. username .. " > /dev/null 2>&1") then
+        os.execute("sudo useradd --system " .. username)
+    end
+end
+
+return moreos

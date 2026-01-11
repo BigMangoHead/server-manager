@@ -25,12 +25,7 @@ function freezer.unfreeze()
     freezeFile:write("0")
     freezeFile:close()
 
-    local _, onlineServers = jsonhandler.getServers()
-    for n, s in pairs(onlineServers) do
-        s.name = n
-    end
-
-    serverinterface.startServers(onlineServers)
+    require("update").run()
 end
 
 return freezer

@@ -1,6 +1,7 @@
 local screenhelper = require("screen")
 local serverinterface = require("serverinterface")
 local jsonhandler = require("jsonhandler")
+local moreos = require("moreos")
 
 local update = {}
 
@@ -41,6 +42,11 @@ function update.run()
     totalRAM = 0
     processorWeight = 0
     for _, server in ipairs(onlineServerData) do
+        if not server.directory then
+            io.stderr:write("ERROR: Server \"" .. server.name .. "\" had no directory, skipping.")
+            goto continue
+        end
+
         if server.maxRAM then
             totalRAM = totalRAM + server.maxRAM
         end
@@ -83,6 +89,20 @@ function update.run()
     end
 
     if #serversToKill > 0 then serverinterface.stopServers(serversToKill) end
+
+    -- Update permissions for server files
+    for _, server in pairs(serversToRun) do
+        local checkFile = io.open(server.directory .. "/.server-check")
+        local user = "mserv-" .. server.name
+        moreos.makeUser(user)
+        if checkFile then
+            checkFile:close()
+            os.execute("sudo chown -R " .. user .. ":" .. user .. " \'" .. server.directory .. "/instance\'" )
+        else 
+            io.stderr:write("WARNING: .server-check file not found for \"" .. server.name .. 
+                            "\". File permissions not updated.")
+        end
+    end
 
     serverinterface.startServers(serversToRun)
 
