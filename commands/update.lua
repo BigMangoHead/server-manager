@@ -6,6 +6,7 @@ local update = {}
 
 function update.run()
 
+    -- Don't process update at all if frozen
     local freezeFile = io.open(FREEZE_FILE_PATH)
     if (freezeFile:read("*all") == "1") then 
         io.stderr:write("STATUS: Server is frozen, update not processed.\n")
@@ -67,6 +68,8 @@ function update.run()
         ::continue::
     end
 
+    -- Check which screens are running to find
+    -- servers that need to be turned off
     screens = screenhelper.getScreens()
     serversToKill = {}
     for _, screen in pairs(screens) do

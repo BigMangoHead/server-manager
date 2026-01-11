@@ -14,6 +14,9 @@ function freezer.freeze()
         s.name = n
     end
 
+    -- This stops all servers listed in the onlineServers
+    -- file. Might want to check that the server being stopped
+    -- actually still has an attached screen.
     serverinterface.stopServers(onlineServers)
 end
 
