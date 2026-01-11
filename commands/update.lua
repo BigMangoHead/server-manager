@@ -93,9 +93,9 @@ function update.run()
     -- Update permissions for server files
     for _, server in pairs(serversToRun) do
         local checkFile = io.open(server.directory .. "/.server-check")
-        local user = "mserv-" .. server.name
-        moreos.makeUser(user)
         if checkFile then
+            local user = "mserv-" .. server.name
+            moreos.makeUser(user)
             checkFile:close()
             os.execute("sudo chown -R " .. user .. ":" .. user .. " \'" .. server.directory .. "/instance\'" )
         else 
