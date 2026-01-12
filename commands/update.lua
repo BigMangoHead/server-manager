@@ -74,8 +74,22 @@ function update.run()
         ::continue::
     end
 
-    -- Check which screens are running to find
-    -- servers that need to be turned off
+    -- Update permissions for all running servers
+    for _, server in pairs(serversToRun) do
+        local checkFile = io.open(server.directory .. "/.server-check")
+        if checkFile then
+            local user = "ms-" .. server.name
+            moreos.makeUser(user)
+            checkFile:close()
+            os.execute("sudo chown -R " .. user .. ":" .. user .. " \'" .. server.directory .. "/instance\'" )
+        else 
+            io.stderr:write("WARNING: .server-check file not found for \"" .. server.name .. 
+                            "\". File permissions not updated.\n")
+        end
+    end
+
+    -- Check which screens are running to find servers that need to 
+    -- be turned off and servers that don't need to be turned on
     screens = screenhelper.getScreens()
     serversToKill = {}
     for _, screen in pairs(screens) do
@@ -89,20 +103,6 @@ function update.run()
     end
 
     if #serversToKill > 0 then serverinterface.stopServers(serversToKill) end
-
-    -- Update permissions for server files
-    for _, server in pairs(serversToRun) do
-        local checkFile = io.open(server.directory .. "/.server-check")
-        if checkFile then
-            local user = "ms-" .. server.name
-            moreos.makeUser(user)
-            checkFile:close()
-            os.execute("sudo chown -R " .. user .. ":" .. user .. " \'" .. server.directory .. "/instance\'" )
-        else 
-            io.stderr:write("WARNING: .server-check file not found for \"" .. server.name .. 
-                            "\". File permissions not updated.\n")
-        end
-    end
 
     serverinterface.startServers(serversToRun)
 
