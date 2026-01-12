@@ -18,14 +18,17 @@ function serverinterface.startServer(server)
         if not server.minRAM then io.stderr:write("WARNING: Missing server minRAM for minecraft server \"" .. server.name .. "\". Assuming to be 4096\n"); server.minRAM = 4096 end
         if not server.maxRAM then io.stderr:write("WARNING: Missing server maxRAM for minecraft server \"" .. server.name .. "\". Assuming to be 8192\n"); server.maxRAM = 8192 end
 
+        os.execute([[screen -Sdm "%%%s" bash "%s/interface/start.sh" "%s" "%s" %d %d]],
+                   server.name, MY_PATH, server.directory, "ms-" .. server.name, server.minRAM, server.maxRAM)
+
         -- Start screen, cd to server directory, run scripts.sh in background, 
         -- start auto-restart.sh passing system user, minRAM, and maxRAM
-        os.execute(string.format([[screen -Sdm "%%%s" bash -c 
-                                   "cd '%s'; 
-                                   bash %s/scripts.sh start &;
-                                   bash %s/interface/auto-restart.sh '%s/run.sh' '%s' %d %d"]], 
-                                   server.name, server.directory, server.directory, MY_PATH, server.directory, 
-                                   "ms-" .. server.name, server.minRAM, server.maxRAM))
+        --os.execute(string.format([[screen -Sdm "%%%s" bash -c 
+        --                           "cd '%s'; 
+        --                           bash %s/scripts.sh start &;
+        --                           bash %s/interface/auto-restart.sh '%s/run.sh' '%s' %d %d"]], 
+        --                           server.name, server.directory, server.directory, MY_PATH, server.directory, 
+        --                           "ms-" .. server.name, server.minRAM, server.maxRAM))
     else
         startGenericServer(server)
     end
