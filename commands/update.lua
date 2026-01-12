@@ -100,7 +100,7 @@ function update.run()
             os.execute("sudo chown -R " .. user .. ":" .. user .. " \'" .. server.directory .. "/instance\'" )
         else 
             io.stderr:write("WARNING: .server-check file not found for \"" .. server.name .. 
-                            "\". File permissions not updated.")
+                            "\". File permissions not updated.\n")
         end
     end
 
