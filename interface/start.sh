@@ -5,12 +5,16 @@ directory=$1
 user=$2
 
 cd "$1"
+echo 1 > "$directory/.running"
 bash scripts.sh start &
 
 while true; do
     bash scripts.sh run &
-    echo "Starting $1/run.sh..."
+    echo "Starting $directory/run.sh..."
     sudo -u "$user" "$directory/run.sh" "$3" "$4"
+
+    isrunning=$(<"$directory/.running")
+    if [ "$isrunning" = 0 ]; then break; fi
 
     echo "$directory/run.sh stopped. Restarting in 10 seconds..."
     bash scripts.sh stop &

@@ -19,8 +19,10 @@ function serverinterface.startServer(server)
 end
 
 function serverinterface.stopServer(server)
+    if not server.directory then io.stderr:write("ERROR: Missing server directory for \"" .. server.name .. "\". Skipping stopping it.\n"); return end
     if server.type == "minecraft" then
-        os.execute("bash \"" .. MY_PATH .. "interface/stop-minecraft.sh\" \"%" .. server.name .. "\" &")
+        os.execute("bash \"" .. MY_PATH .. "interface/stop-minecraft.sh\" \"%" .. 
+                   server.name .. "\" \"" .. server.directory .. "\" &")
     else
         stopGenericServer(server)
     end
