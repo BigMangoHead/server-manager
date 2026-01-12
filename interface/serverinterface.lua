@@ -24,7 +24,7 @@ function serverinterface.startServer(server)
                                    "cd '%s'; 
                                    bash %s/scripts.sh start &;
                                    bash %s/interface/auto-restart.sh '%s/run.sh' '%s' %d %d"]], 
-                                   server.name, server.directory, MY_PATH, server.directory, 
+                                   server.name, server.directory, server.directory, MY_PATH, server.directory, 
                                    "ms-" .. server.name, server.minRAM, server.maxRAM))
     else
         startGenericServer(server)
