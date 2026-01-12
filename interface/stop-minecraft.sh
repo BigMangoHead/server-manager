@@ -9,4 +9,4 @@ sleep 5
 screen -XS "$1" stuff "stop\n"
 }
 
-run "$1" &
+run "$1" "$2" &
