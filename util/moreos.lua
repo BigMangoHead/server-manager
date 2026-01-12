@@ -15,7 +15,7 @@ end
 -- Adds a system user if one does not exist and does nothing otherwise
 function os.makeUser(username)
     if not os.execute("id " .. username .. " > /dev/null 2>&1") then
-        os.execute("sudo useradd --system --comment \"mserver system user\" --shell /usr/bin/nologin"  .. username)
+        os.execute("sudo useradd --system --comment \"mserver system user\" --shell /usr/bin/nologin "  .. username)
     end
 end
 
