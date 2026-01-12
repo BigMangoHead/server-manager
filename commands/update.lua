@@ -94,7 +94,7 @@ function update.run()
     for _, server in pairs(serversToRun) do
         local checkFile = io.open(server.directory .. "/.server-check")
         if checkFile then
-            local user = "mserv-" .. server.name
+            local user = "ms-" .. server.name
             moreos.makeUser(user)
             checkFile:close()
             os.execute("sudo chown -R " .. user .. ":" .. user .. " \'" .. server.directory .. "/instance\'" )

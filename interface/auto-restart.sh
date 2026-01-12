@@ -1,13 +1,14 @@
 #!/bin/bash
 ALL_ARGS=("$@")
-arguments=("${ALL_ARGS[@]:1}")
+arguments=("${ALL_ARGS[@]:2}")
 program=$1
+user=$2
 
 while true; do
     echo "Starting $program..."
-    $program $arguments
+    sudo -u "$user" "$program" $arguments
 
-    echo "$program stopped. Restarting in 15 seconds..."
+    echo "$program stopped. Restarting in 10 seconds..."
 
-    sleep 15
+    sleep 10
 done
