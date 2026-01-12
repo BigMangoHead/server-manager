@@ -13,7 +13,10 @@ while true; do
     echo "Starting $directory/run.sh..."
     sudo -u "$user" "$directory/run.sh" "$3" "$4"
 
-    if [[ <(cat "$directory/.running") = 0 ]]; then break; fi
+    if [[ <(cat "$directory/.running") = 0 ]]; then 
+        echo "SHOULD STOP"
+        break 
+    fi
 
     echo "$directory/run.sh stopped. Restarting in 10 seconds..."
     bash scripts.sh stop &
