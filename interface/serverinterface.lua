@@ -12,9 +12,10 @@ function serverinterface.startServer(server)
 
     if not server.minRAM then io.stderr:write("WARNING: Missing minRAM for server \"" .. server.name .. "\". Assuming to be 4096\n"); server.minRAM = 4096 end
     if not server.maxRAM then io.stderr:write("WARNING: Missing maxRAM for server \"" .. server.name .. "\". Assuming to be 8192\n"); server.maxRAM = 8192 end
+    if server.autorestart == nil then server.autorestart = true end
 
-    os.execute(string.format([[screen -Sdm "%%%s" bash "%s/interface/start.sh" "%s" "%s" %d %d]],
-                             server.name, MY_PATH, server.directory, "ms-" .. server.name, server.minRAM, server.maxRAM))
+    os.execute(string.format([[screen -Sdm "%%%s" bash "%s/interface/start.sh" "%s" "%s" %d %d %d]],
+                             server.name, MY_PATH, server.directory, "ms-" .. server.name, server.minRAM, server.maxRAM, server.autorestart and 1 or 0))
 
 end
 

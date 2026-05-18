@@ -3,6 +3,9 @@
 # minimum RAM, maximum RAM
 directory=$1
 user=$2
+minRAM=$3
+maxRAM=$4
+autorestart=$5
 
 cd "$1"
 echo 1 > "$directory/.running"
@@ -11,14 +14,15 @@ bash scripts.sh start &
 while true; do
     bash scripts.sh run &
     echo "Starting $directory/run.sh..."
-    sudo -u "$user" "$directory/run.sh" "$3" "$4"
+    sudo -u "$user" "$directory/run.sh" "$minRAM" "$maxRAM"
 
-    if [[ $(cat "$directory/.running") = 0 ]]; then 
+    bash scripts.sh stop &
+
+    if [[ $(cat "$directory/.running") = 0 || $autorestart = 0 ]]; then 
+        echo 0 > "$directory/.running"
         break 
     fi
 
     echo "$directory/run.sh stopped. Restarting in 10 seconds..."
-    bash scripts.sh stop &
-
     sleep 10
 done
