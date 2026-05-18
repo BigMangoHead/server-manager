@@ -21,7 +21,7 @@ function info.status()
     for k, v in pairs(onlineServerData) do
         print("    " .. k)
         for a, b in pairs(v) do
-            print("        " .. a .. ": " .. b)
+            print("        " .. tostring(a) .. ": " .. tostring(b))
         end
     end
 end
