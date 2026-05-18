@@ -19,10 +19,18 @@ while true; do
     bash scripts.sh stop &
 
     if [[ $(cat "$directory/.running") = 0 || $autorestart = 0 ]]; then 
-        echo 0 > "$directory/.running"
         break 
     fi
 
     echo "$directory/run.sh stopped. Restarting in 10 seconds..."
     sleep 10
+done
+
+# Scuffed solution when autorestart is disabled.
+# We just keep the screen open so it isn't restarted.
+while [[ $autorestart = 0 ]]; do
+    sleep 10
+    if [[ $(cat "$directory/.running") = 0 ]]; then 
+        break
+    fi
 done
