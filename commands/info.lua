@@ -7,12 +7,11 @@ local info = {}
 function info.status()
     local serverData, onlineServerData, miscData = jsonhandler.getServers()
     local screens = screenhandler.getScreens()
-    freezeStatus = miscData.frozen
 
-    if freezeStatus == "0" then
-        print("Servers currently not frozen.")
-    else
+    if miscData.frozen then
         print("SERVERS CURRENTLY FROZEN.")
+    else
+        print("Servers currently not frozen.")
     end
     print("Current running screens: [" .. table.concat(screens, ", ") .. "]")
     print("Online servers: ")
