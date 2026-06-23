@@ -6,16 +6,13 @@ local moreos = require("moreos")
 local update = {}
 
 function update.run()
+    local serverData, onlineServerData, miscServerData = jsonhandler.getServers()
 
     -- Don't process update at all if frozen
-    local freezeFile = io.open(FREEZE_FILE_PATH)
-    if (freezeFile:read("*all") == "1") then 
+    if miscServerData.frozen then
         logger.status("Server is frozen, update not processed.")
         return
     end
-    freezeFile:close()
-
-    local serverData, onlineServerData = jsonhandler.getServers()
 
     for name, server in pairs(onlineServerData) do
         if not server.priority then
@@ -54,7 +51,7 @@ function update.run()
             processorWeight = processorWeight + server.processorWeight
         end
 
-        if processorWeight > 100 or totalRAM > MAX_RAM then
+        if miscServerData.limit and (processorWeight > 100 or totalRAM > MAX_RAM) then
             if processorWeight > 100 and totalRAM > MAX_RAM then
                 logger.status("Processor weight maximum and RAM maximum would be reached by running \"" .. server.name .. "\", skipping.")
             elseif processorWeight > 100 then
@@ -72,6 +69,13 @@ function update.run()
         serversToRun[server.name] = server
 
         ::continue::
+    end
+
+    if totalRAM > MAX_RAM then
+        logger.warning("RAM limit exceeded, server performance may be reduced (" .. totalRAM .. "/" .. MAX_RAM .. ")")
+    end
+    if processorWeight > 100 then
+        logger.warning("Processor weight limit exceeded, server performance may be reduced (" .. processorWeight .. "/" .. 100 .. ")")
     end
 
     -- Update permissions for all running servers

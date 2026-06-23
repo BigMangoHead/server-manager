@@ -4,43 +4,52 @@ local jsonhandler = {}
 
 -- Parse servers
 function jsonhandler.getServers()
-    local serverDataFile, error = io.open(SERVER_DATA_PATH)
+    local serverDataFile, err = io.open(SERVER_DATA_PATH)
     if not serverDataFile then
-        error("Error opening server data file: " .. error)
+        error("Error opening server data file: " .. err)
     end
     local serverData = json.decode(serverDataFile:read("*all"))
     serverDataFile:close()
 
-    local onlineServerDataFile, error = io.open(ONLINE_SERVER_DATA_PATH)
+    local onlineServerDataFile, err = io.open(ONLINE_SERVER_DATA_PATH)
     if not onlineServerDataFile then
-        error("Error opening online server data file: " .. error)
+        error("Error opening online server data file: " .. err)
     end
     local onlineServerData = json.decode(onlineServerDataFile:read("*all"))
     onlineServerDataFile:close()
 
-    io.stderr:write("STATUS: Successfully decoded server data and online server data.\n")
+    local miscServerDataFile, err = io.open(MISC_SERVER_DATA_PATH)
+    if not miscServerDataFile then
+        error("Error opening misc server data file: " .. err)
+    end
+    local miscServerData = json.decode(miscServerDataFile:read("*all"))
+    miscServerDataFile:close()
 
-    return serverData, onlineServerData
+    io.stderr:write("STATUS: Successfully decoded all server data.\n")
+
+    return serverData, onlineServerData, miscServerData
+end
+
+local function updateJSONData(filePath, data, type)
+    local jsondata = json.encode(data)
+    local file, err = io.open(filePath, 'w')
+    if not file then
+        error("Error opening " .. type .. " file: " .. err)
+    end
+    file:write(jsondata)
+    file:close()
 end
 
 function jsonhandler.updateServerData(data)
-    local jsondata = json.encode(data)
-    local serverDataFile, error = io.open(SERVER_DATA_PATH, 'w')
-    if not serverDataFile then
-        error("Error opening server data file: " .. error)
-    end
-    serverDataFile:write(jsondata)
-    serverDataFile:close()
+    updateJSONData(SERVER_DATA_PATH, data, "server data")
 end
 
 function jsonhandler.updateOnlineServers(data)
-    local jsondata = json.encode(data)
-    local onlineServerDataFile, error = io.open(ONLINE_SERVER_DATA_PATH, 'w')
-    if not onlineServerDataFile then
-        error("Error opening online server data file: " .. error)
-    end
-    onlineServerDataFile:write(jsondata)
-    onlineServerDataFile:close()
+    updateJSONData(ONLINE_SERVER_DATA_PATH, data, "online server data")
+end
+
+function jsonhandler.updateMiscServerData(data)
+    updateJSONData(MISC_SERVER_DATA_PATH, data, "misc server data")
 end
 
 return jsonhandler

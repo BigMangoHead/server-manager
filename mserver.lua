@@ -2,7 +2,7 @@ local argparse = require("argparse")
 
 SERVER_DATA_PATH = "/home/bigma/scripts/data/mserver-data.json"
 ONLINE_SERVER_DATA_PATH = "/home/bigma/scripts/data/mserver-online.json"
-FREEZE_FILE_PATH = "/home/bigma/scripts/data/mserver-freeze"
+MISC_SERVER_DATA_PATH = "/home/bigma/scripts/data/mserver-misc-data.json"
 
 -- In megabytes
 MAX_RAM = 32768
@@ -13,7 +13,7 @@ package.path = package.path .. ";" .. MY_PATH .. "commands/?.lua;" .. MY_PATH ..
 logger = require("logger")
 
 
-local parser = argparse() {
+parser = argparse() {
     name = "mserv",
     description = "Scripts for managing gaming servers"
 }
@@ -26,6 +26,10 @@ local stop = parser:command("stop", "Removes server(s) from the online server da
 stop:argument("servers"):args("+")
 parser:command("freeze", "Stops all servers and prevents all updates until unfrozen")
 parser:command("unfreeze", "Removes frozen flag and runs update")
+local set = parser:command("set", "Store value for flag, and then run update")
+set:argument("key")
+set:argument("value")
+set:flag("-n --no-update")
 
 local args = parser:parse()
 
@@ -33,8 +37,9 @@ logger.status("Running command \"" .. table.concat(arg, " ") .. "\" at " .. os.d
 
 if args.update then require("update").run()
 elseif args.status then require("info").status()
-elseif args.run then require("runner").run(args.servers)
-elseif args.stop then require("runner").stop(args.servers)
+elseif args.run then require("runner").run(args)
+elseif args.stop then require("runner").stop(args)
 elseif args.freeze then require("freezer").freeze()
 elseif args.unfreeze then require("freezer").unfreeze()
+elseif args.set then require("settings").set(args)
 end

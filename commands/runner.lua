@@ -4,10 +4,10 @@ local update = require("update")
 
 local runner = {}
 
-function runner.run(servers) 
+function runner.run(args) 
     serverData, onlineServerData = jsonhandler.getServers()
 
-    for _, name in ipairs(servers) do
+    for _, name in ipairs(args.servers) do
         if serverData[name] == nil then
             error("No server with that name!")
         end
@@ -19,10 +19,10 @@ function runner.run(servers)
     update.run()
 end
 
-function runner.stop(servers)
+function runner.stop(args)
     serverData, onlineServerData = jsonhandler.getServers()
 
-    for _, name in ipairs(servers) do
+    for _, name in ipairs(args.servers) do
         onlineServerData[name] = nil
     end
 
