@@ -5,11 +5,9 @@ local jsonhandler = require("jsonhandler")
 local info = {}
 
 function info.status()
-    local freezeFile = io.open(FREEZE_FILE_PATH)
-    local freezeStatus = freezeFile:read("*all")
-    freezeFile:close()
-    local serverData, onlineServerData = jsonhandler.getServers()
+    local serverData, onlineServerData, miscData = jsonhandler.getServers()
     local screens = screenhandler.getScreens()
+    freezeStatus = miscData.frozen
 
     if freezeStatus == "0" then
         print("Servers currently not frozen.")
