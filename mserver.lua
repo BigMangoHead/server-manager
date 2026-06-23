@@ -1,3 +1,4 @@
+local argparse = require("argparse")
 
 SERVER_DATA_PATH = "/home/bigma/scripts/data/mserver-data.json"
 ONLINE_SERVER_DATA_PATH = "/home/bigma/scripts/data/mserver-online.json"
@@ -6,33 +7,34 @@ FREEZE_FILE_PATH = "/home/bigma/scripts/data/mserver-freeze"
 -- In megabytes
 MAX_RAM = 32768
 
-MY_PATH="/home/bigma/scripts/lua/mserver/"
+MY_PATH="/home/bigma/coding/projects/server-manager/"
 package.path = package.path .. ";" .. MY_PATH .. "commands/?.lua;" .. MY_PATH .. "util/?.lua;" .. MY_PATH .. "interface/?.lua"
 
-io.stderr:write("STATUS: Running command \"" .. table.concat(arg, " ") .. "\" at " .. os.date("%c") .. ".\n")
+logger = require("logger")
 
-if arg[1] == "update" then
-    require("update").run()
 
-elseif arg[1] == "status" then
-    require("info").status()
+local parser = argparse() {
+    name = "mserv",
+    description = "Scripts for managing gaming servers"
+}
 
-elseif arg[1] == "run" then
-    require("runner").run(arg[2])
+parser:command("update u", "Stops and starts servers as necessary to match the online server data file")
+parser:command("status", "Gives all info about currently running servers")
+local run = parser:command("run start", "Adds server(s) to the online server data file, then runs update to start it")
+run:argument("servers"):args("+")
+local stop = parser:command("stop", "Removes server(s) from the online server data file, then runs update to stop it")
+stop:argument("servers"):args("+")
+parser:command("freeze", "Stops all servers and prevents all updates until unfrozen")
+parser:command("unfreeze", "Removes frozen flag and runs update")
 
-elseif arg[1] == "stop" then
-    require("runner").stop(arg[2])
+local args = parser:parse()
 
-elseif arg[1] == "edit" then
-    --require("edit").run(arg)
+logger.status("Running command \"" .. table.concat(arg, " ") .. "\" at " .. os.date("%c") .. ".")
 
-elseif arg[1] == "add" then
-    --require("add").run(arg)
-
-elseif arg[1] == "freeze" then
-    require("freezer").freeze()
-
-elseif arg[1] == "unfreeze" then
-    require("freezer").unfreeze()
-
+if args.update then require("update").run()
+elseif args.status then require("info").status()
+elseif args.run then require("runner").run(args.servers)
+elseif args.stop then require("runner").stop(args.servers)
+elseif args.freeze then require("freezer").freeze()
+elseif args.unfreeze then require("freezer").unfreeze()
 end

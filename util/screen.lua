@@ -17,7 +17,7 @@ local function lineIterator( str )
     end
 end
 
-screen = {}
+local screen = {}
 
 -- Returns screens a list of screens that begin with "%".
 -- Note that the "%" character is cropped from the beginning of the name

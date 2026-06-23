@@ -10,7 +10,7 @@ function update.run()
     -- Don't process update at all if frozen
     local freezeFile = io.open(FREEZE_FILE_PATH)
     if (freezeFile:read("*all") == "1") then 
-        io.stderr:write("STATUS: Server is frozen, update not processed.\n")
+        logger.status("Server is frozen, update not processed.")
         return
     end
     freezeFile:close()
@@ -19,7 +19,7 @@ function update.run()
 
     for name, server in pairs(onlineServerData) do
         if not server.priority then
-            io.stderr:write("WARNING: Server \"" .. name .. "\" had no set priority; assuming priority to be 0.\n")
+            logger.warning("WARNING: Server \"" .. name .. "\" had no set priority; assuming priority to be 0.")
             server.priority = 0
         end
     end
@@ -43,7 +43,7 @@ function update.run()
     processorWeight = 0
     for _, server in ipairs(onlineServerData) do
         if not server.directory then
-            io.stderr:write("ERROR: Server \"" .. server.name .. "\" had no directory, skipping.")
+            logger.error("Server \"" .. server.name .. "\" had no directory, skipping.")
             goto continue
         end
 
@@ -56,11 +56,11 @@ function update.run()
 
         if processorWeight > 100 or totalRAM > MAX_RAM then
             if processorWeight > 100 and totalRAM > MAX_RAM then
-                io.stderr:write("STATUS: Processor weight maximum and RAM maximum would be reached by running \"" .. server.name .. "\", skipping.\n")
+                logger.status("Processor weight maximum and RAM maximum would be reached by running \"" .. server.name .. "\", skipping.")
             elseif processorWeight > 100 then
-                io.stderr:write("STATUS: Processor weight maximum would be reached by running \"" .. server.name .. "\", skipping.\n")
+                logger.status("Processor weight maximum would be reached by running \"" .. server.name .. "\", skipping.")
             else 
-                io.stderr:write("STATUS: RAM maximum would be reached by running \"" .. server.name .. "\", skipping.\n")
+                logger.status("RAM maximum would be reached by running \"" .. server.name .. "\", skipping.")
             end
 
             if server.processorWeight then processorWeight = processorWeight - server.processorWeight end
@@ -68,7 +68,7 @@ function update.run()
             goto continue
         end
 
-        io.stderr:write("STATUS: Choosing to run " .. server.name .. ".\n")
+        logger.status("Choosing to run " .. server.name .. ".")
         serversToRun[server.name] = server
 
         ::continue::
@@ -83,8 +83,8 @@ function update.run()
             checkFile:close()
             os.execute("sudo chown -R " .. user .. ":" .. user .. " \'" .. server.directory .. "/instance\'" )
         else 
-            io.stderr:write("WARNING: .server-check file not found for \"" .. server.name .. 
-                            "\". File permissions not updated.\n")
+            logger.warning(".server-check file not found for \"" .. server.name .. 
+                            "\". File permissions not updated.")
         end
     end
 
