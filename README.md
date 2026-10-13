@@ -8,7 +8,7 @@ Server data is stored in a separate "server-data" file and then copied to an "on
 - directory: Folder for the server. 
 - autorestart: Defaults to true, will not autorestart the server if false (note: somewhat jank implementation)
 
-There is an expected format for this directory. It should contain the following files:
+There is an expected format for this directory. It should contain the following files (see `/template/all` for an example):
 - instance directory: contains server files, will be owned by game system user 
 (chown is used to force this, system user is created automatically with name ms-<server>)
 - run.sh: will be run by the game system user and should start the game server
@@ -19,5 +19,6 @@ Not used consistently, mainly for some scary operations like when changing file 
     - start (called when the screen is initialized)
     - run (called right before run.sh is executed)
     - stop (called after run.sh finishes execution, such as after a crash)
+    - close (called right before the screen is killed)
 
-scripts.sh is run inside the server directory by the main user, with second argument being the server directory, and third argument being the game system user.
+scripts.sh is run inside the server directory by the main user, with second argument being the server directory, and third argument being the game system user. It is a blocking call.

@@ -55,7 +55,11 @@ function generator.run()
     end)
     if not server.processorWeight then server.processorWeight = 8192 end
 
-    server.type = prompt("Server type? [Default: minecraft]")
+    server.type = prompt("Server type? [Options: minecraft, misc; Default: minecraft]", function (t)
+        if (not t == "minecraft" and not t == "misc" and not t == "") then return false end
+        return true
+    end)
+    if not server.type then server.type = "minecraft" end
 
     server.priority = prompt("Priority? [Default: 0]", function (t)
         if (t == "") then return true end
@@ -101,7 +105,7 @@ function generator.run()
         serverData[name] = server
         jsonhandler.updateServerData(serverData)
     else
-        error("Failed to make server directory.")
+        logger.error("Failed to make server directory.")
     end
 
 end
