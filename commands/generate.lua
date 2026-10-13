@@ -36,7 +36,8 @@ function generator.run()
         if (x < 100 or x > MAX_RAM) then print("RAM amount must be at least 100 and at most MAX_RAM (" .. MAX_RAM .. ")") return false end
         return true
     end)
-    if not server.minRAM then server.minRAM = 4096 end
+    if server.minRAM == "" then server.minRAM = 4096 end
+    server.minRAM = tonumber(maxRAM)
 
     server.maxRAM = prompt("Maximum RAM in MB? [Default: 8192]", function (t)
         if (t == "") then return true end
@@ -45,7 +46,8 @@ function generator.run()
         if (x < 100 or x > MAX_RAM) then print("RAM amount must be at least 100 and at most MAX_RAM (" .. MAX_RAM .. ")") return false end
         return true
     end)
-    if not server.maxRAM then server.maxRAM = 8192 end
+    if not server.maxRAM == "" then server.maxRAM = 8192 end
+    server.maxRAM = tonumber(maxRAM)
 
     server.processorWeight = prompt("Processor weight? Must be in range 0-100. [Default: 20]", function (t)
         if (t == "") then return true end
@@ -54,13 +56,14 @@ function generator.run()
         if (x < 0 or x > 100) then print("Processor weight outside of valid range.") return false end
         return true
     end)
-    if not server.processorWeight then server.processorWeight = 8192 end
+    if server.processorWeight == "" then server.processorWeight = 8192 end
+    server.processorWeight = tonumber(server.processorWeight)
 
     server.type = prompt("Server type? [Options: minecraft, misc; Default: minecraft]", function (t)
         if (not t == "minecraft" and not t == "misc" and not t == "") then return false end
         return true
     end)
-    if not server.type then server.type = "minecraft" end
+    if server.type == "" then server.type = "minecraft" end
 
     server.priority = prompt("Priority? [Default: 0]", function (t)
         if (t == "") then return true end
@@ -69,7 +72,8 @@ function generator.run()
         if (x < 0) then print("Must be nonnegative.") return false end
         return true
     end)
-    if not server.priority then server.priority = 0 end
+    if server.priority == "" then server.priority = 0 end
+    server.priority = tonumber(server.priority)
 
     server.autorestart = prompt("Autorestart enabled? [Default: true]", function (t)
         if (t == "true" or t == "false" or t == "") then return true
