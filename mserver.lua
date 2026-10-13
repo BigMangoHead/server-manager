@@ -2,7 +2,7 @@ local argparse = require("argparse")
 local dotenv = require("lua-dotenv")
 logger = require("logger")
 
-local ok, err = dotenv.load("/path/to/.env")
+local ok, err = dotenv.load(".env")
 if not ok then
   error("Could not load .env file:", err)
 end
@@ -10,7 +10,7 @@ end
 SERVER_DATA_PATH = dotenv.get("SERVER_DATA_PATH")
 ONLINE_SERVER_DATA_PATH = dotenv.get("ONLINE_SERVER_DATA_PATH")
 MISC_SERVER_DATA_PATH = dotenv.get("MISC_SERVER_DATA_PATH")
-MAX_RAM = dotenv.get("MAX_RAM")
+MAX_RAM = tonumber(dotenv.get("MAX_RAM"))
 MY_PATH = dotenv.get("PROJECT_PATH") .. '/'
 SYMLINK_PATH = dotenv.get("SYMLINK_DIR", nil)
 package.path = package.path .. ";" .. MY_PATH .. "commands/?.lua;" .. MY_PATH .. "util/?.lua;" .. MY_PATH .. "interface/?.lua"

@@ -19,7 +19,7 @@ function generator.run()
     local name = prompt("Server name?", function (t)
         if (#t < 2) then print("Name too short.") return false
         elseif t:match("[^%w%-%_]") then print("Invalid characters.") return false
-        elseif not serverData[name] then print("Name already taken.") return false
+        elseif serverData[name] then print("Name already taken.") return false
         else return true end
     end)
 
