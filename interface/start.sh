@@ -19,6 +19,7 @@ while true; do
     bash scripts.sh stop "$directory" "$user" &
 
     if [[ $(cat "$directory/.running") = 0 || $autorestart = 0 ]]; then 
+        bash scripts.sh close "$directory" "$user" &
         break 
     fi
 
