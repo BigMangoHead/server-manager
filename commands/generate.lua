@@ -4,9 +4,10 @@ local generator = {}
 
 function prompt(text, checkFunc)
     local valid = false
+    local response
     while not valid do
         io.write(text .. " ")
-        local response = io.read()
+        response = io.read()
         valid = checkFunc(response)
     end
     return response
@@ -71,7 +72,7 @@ function generator.run()
     if not server.priority then server.priority = 0 end
 
     server.autorestart = prompt("Autorestart enabled? [Default: true]", function (t)
-        if (t == "true" or t == "false") then return true
+        if (t == "true" or t == "false" or t == "") then return true
         else return false end
     end)
     if server.autorestart == "false" then server.autorestart = false
