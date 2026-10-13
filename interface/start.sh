@@ -9,17 +9,17 @@ autorestart=$5
 
 cd "$1"
 echo 1 > "$directory/.running"
-bash scripts.sh start "$directory" "$user" &
+bash scripts.sh start "$directory" "$user"
 
 while true; do
-    bash scripts.sh run "$directory" "$user" &
+    bash scripts.sh run "$directory" "$user"
     echo "Starting $directory/run.sh..."
     sudo -u "$user" "$directory/run.sh" "$minRAM" "$maxRAM"
 
-    bash scripts.sh stop "$directory" "$user" &
+    bash scripts.sh stop "$directory" "$user"
 
     if [[ $(cat "$directory/.running") = 0 || $autorestart = 0 ]]; then 
-        bash scripts.sh close "$directory" "$user" &
+        bash scripts.sh close "$directory" "$user"
         break 
     fi
 
