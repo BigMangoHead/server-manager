@@ -1,6 +1,5 @@
 local argparse = require("argparse")
 local dotenv = require("lua-dotenv")
-logger = require("logger")
 
 local ok, err = dotenv.load(".env")
 if not ok then
@@ -15,6 +14,7 @@ MY_PATH = dotenv.get("PROJECT_PATH") .. '/'
 SYMLINK_PATH = dotenv.get("SYMLINK_DIR", nil)
 package.path = package.path .. ";" .. MY_PATH .. "commands/?.lua;" .. MY_PATH .. "util/?.lua;" .. MY_PATH .. "interface/?.lua"
 
+logger = require("logger")
 
 parser = argparse() {
     name = "mserv",
